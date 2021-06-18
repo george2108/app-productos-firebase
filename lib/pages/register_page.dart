@@ -3,21 +3,21 @@ import 'package:login_validation_bloc/bloc/provider.dart';
 import 'package:login_validation_bloc/providers/auth_provider.dart';
 import 'package:login_validation_bloc/utils/show_alert.dart';
 
-class LoginPage extends StatelessWidget {
+class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: <Widget>[
           Background(),
-          LoginForm(),
+          _RegisterForm(),
         ],
       ),
     );
   }
 }
 
-class LoginForm extends StatelessWidget {
+class _RegisterForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -46,7 +46,7 @@ class LoginForm extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Login',
+                  'Crear cuenta',
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
@@ -57,19 +57,14 @@ class LoginForm extends StatelessWidget {
                 SizedBox(height: 10.0),
                 PasswordInput(bloc: bloc),
                 SizedBox(height: 10.0),
-                ButtonSubmitLogin(bloc: bloc),
-                TextButton(
-                  child: Text('¿Olvidó su contraseña?'),
-                  onPressed: () =>
-                      Navigator.pushReplacementNamed(context, 'register'),
-                ),
+                ButtonSubmitRegister(bloc: bloc),
                 SizedBox(height: 5.0),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 25.0),
                   child: Divider(color: Colors.grey),
                 ),
                 Text(
-                  'O inicia sesión con',
+                  'O registrate con',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 20.0),
@@ -86,14 +81,13 @@ class LoginForm extends StatelessWidget {
           ),
           TextButton(
             child: Text(
-              'Crear una nueva cuenta',
+              '¿Ya tienes cuenta?, inicia sesión',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 15.0,
               ),
             ),
-            onPressed: () =>
-                Navigator.pushReplacementNamed(context, 'register'),
+            onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
           ),
           SizedBox(height: 50.0),
         ],
@@ -185,10 +179,10 @@ class PasswordInput extends StatelessWidget {
   }
 }
 
-class ButtonSubmitLogin extends StatelessWidget {
+class ButtonSubmitRegister extends StatelessWidget {
   final LoginBloc bloc;
 
-  ButtonSubmitLogin({this.bloc});
+  ButtonSubmitRegister({this.bloc});
 
   @override
   Widget build(BuildContext context) {
@@ -205,15 +199,15 @@ class ButtonSubmitLogin extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
             child: Text('Entrar'),
           ),
-          onPressed: snapshot.hasData ? () => _login(context, bloc) : null,
+          onPressed: snapshot.hasData ? () => _register(context, bloc) : null,
         );
       },
     );
   }
 
-  _login(BuildContext context, LoginBloc bloc) async {
+  _register(BuildContext context, LoginBloc bloc) async {
     final authProvider = new AuthProvider();
-    Map data = await authProvider.login(bloc.email, bloc.password);
+    final data = await authProvider.signUpUser(bloc.email, bloc.password);
     if (data['ok']) {
       Navigator.pushReplacementNamed(context, 'home');
     } else {
