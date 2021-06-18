@@ -1,6 +1,6 @@
-# login_validation_bloc
+# products app
 
-A new Flutter project.
+aplicacion para subir productos a firebase y sus imagenes a cloudinary
 
 ## Getting Started
 
